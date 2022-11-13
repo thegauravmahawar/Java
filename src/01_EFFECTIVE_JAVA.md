@@ -136,6 +136,62 @@ NutritionFacts cocaCola = new NutritionFacts.Builder(240, 8)
 
 ## Enforce the singleton property with a private constructor or an enum type
 
+A singleton is simply a class that is instantiated exactly once. Singletons typically represent a system component that is intrinsically unique, such as the window manager or file system. **Making a class a singleton can make it difficult to test its clients**, as it's impossible to substitute a mock implementation for a singleton unless it implements an interface that serves as its type.
+
+```java
+//Singleton with public final field
+public class Elvis {
+    public static final Elvis INSTANCE = new Elvis();
+    private Elvis() {}
+    
+    public void leaveTheBuilding() {}
+}
+```
+
+The private constructor is called only once, to initialize the public static final field `Elvis.INSTANCE`. The lack of a public or protected constructor guarantees only one instance of the class is initialized - no more, no less. 
+
+Nothing that a client does can change this, with one caveat: a privileged client can invoke the private constructor reflectively with the aid of the `AccessibleObject.setAccessible` method. If you need to defend against this attack, modify the constructor to make it throw an exception if it's asked to create a second instance.
+
+```java
+//Singleton with static factory
+public class Elvis {
+    private static final Elvis INSTANCE = new Elvis();
+
+    private Elvis() {}
+
+    public static Elvis getInstance() { return INSTANCE; }
+
+    public void leaveTheBuilding() {}
+}
+```
+
+All calls to `Elvis.INSTANCE` return the same object reference, and no other `Elvis` instance will ever be created.
+
+The main advantage of the public field approach is that the declarations make it clear that the class is singleton: the public static field is final, so it will always contain the same object reference.
+
+The one advantage of the factory method approach is that it gives you the flexibility to change your mind about whether the class should be a singleton without changing its API.
+
+To make a singleton class that is implemented using either of the previous approaches *serializable*, it is not sufficient merely to add `implements Serializable` to its declaration. To maintain the singleton guarantee, you have to declare all instance fields `transient` and provide a `readResolve` method. Otherwise, each time a serialized instance is deserialized, a new instance will be created, leading, in the case of our example, to spurious `Elvis` sightings.
+
+```java
+//readResolve method to preserve singleton property
+private Object readResolve() {
+    //Return the one true Elvis and let the garbage collector take care of the Elvis impersonator.
+    return INSTANCE;    
+}
+```
+
+```java
+//Enum singleton - the preferred approach
+public enum Elvis {
+    INSTANCE;
+    
+    public void leaveTheBuilding() {}
+}
+```
+
+This approach is functionally equivalent to the public field approach, except that it is more concise, provides the serialization machinery for free, and provides an ironclad guarantee against multiple instantiation, even in the face of sophisticated serialization or reflection attacks.
+
 ## Enforce noninstantiability with a private constructor
 
 ## Avoid creating unnecessary objects
