@@ -1,13 +1,13 @@
 # Memory Management in Java
 
-## Stack
+The Java memory model used internally in the JVM divides memory between thread stacks and heap.
 
-**Stack** is the memory that is set aside for execution of a thread. When a method is called in a thread, that method is pushed on the stack as a `stack frame`.
+![Java Memory Model](../assets/java-memory-model-1.png)
+
+## Thread Stack
+
+Each thread running in the Java virtual machine has its own thread stack. **Stack** is the memory that is set aside for execution of a thread. When a method is called in a thread, that method is pushed on the stack as a `stack frame`.
 The `stack frame` contains the local variables and references to objects (which are created in the heap) that are present in the method for which the `stack frame` was created. Once the execution of the method is complete, the `stack frame` is removed from the stack.
-
-<p align="center">
-  <img src="../assets/java-stack-1.png" height="300" width="500" title="hover text">
-</p>
 
 ## Heap
 
@@ -15,15 +15,21 @@ When a Java program starts, the `OS` allots memory to the `JVM` for the applicat
 
 **Heap** is the dynamic memory that is allocated to a `JVM` process. This memory is used by the objects created during the application runtime and `JRE` classes.
 
-<p align="center">
-  <img src="../assets/java-heap-1.png" height="300" width="500" title="hover text">
-</p>
+The heap contains all objects created in the application regardless of which thread created the object.
+
+![Java Memory Model 2](../assets/java-memory-model-2.png)
+
+A local variable may be of primitive type, in which case it is kept on the thread stack. A local variable may also be a reference to an object. In that case the reference (the local variable) is stored on the thread stack, but the object itself is stored on the heap.
+
+![Java Memory Model 3](../assets/java-memory-model-3.png)
 
 The **Young Generation** memory space is where the new objects are created. Young generation is divided into two parts - **Eden Memory** and **Survivor Memory**.
 
 When Eden space is filled, a **Minor GC** is performed and all the survivor objects are moved to one of the survivor spaces. Objects which survive many cycles of Minor GC, are moved to the **Old Generation** memory space.
 
 **Old Generation** memory contains objects that are long-lived and have survived many iterations of a Minor GC.
+
+![Java Heap](../assets/java-heap-1.png)
 
 ## Permanent Generation
 
@@ -42,10 +48,6 @@ In `Java 8`, PermGen is replaced with **Metaspace**. They are very similar in th
 A `String` intern pool allows the runtime to save memory by preserving immutable strings in a pool so that common strings can be used instead of creating multiple instances of it.
 
 When we use `"" (double quotes)` to declare a `String` variable, it first looks in the `String` pool if a String exists with the same value and returns the reference, else it creates a new one in the `String` pool.
-
-<p align="center">
-  <img src="../assets/string-pool-1.png" height="300" width="600" title="hover text">
-</p>
 
 ```java
 String greet = "Hello";
