@@ -14,39 +14,39 @@ public static Boolean valueOf(boolean b) {
 
 **Static factory methods, unlike constructors, have names.**
 
-> If the parameters to a constructor do not, in and of themselves, describe the object being returned, a static factory with a well-chosen name is easier to use and the resulting client code easier to read.
->
-> For example the constructor, `BigInteger(int, int, Random)`, which returns a `BigInteger` that is probably prime, would have been better expressed as a static factory method named `BigInteger.probablePrime`.
+If the parameters to a constructor do not, in and of themselves, describe the object being returned, a static factory with a well-chosen name is easier to use and the resulting client code easier to read.
+
+For example the constructor, `BigInteger(int, int, Random)`, which returns a `BigInteger` that is probably prime, would have been better expressed as a static factory method named `BigInteger.probablePrime`.
 
 **Static factory methods, unlike constructors, are not required to create a new object each time they're invoked.**
 
-> This allows immutable classes to use preconstructed instances, or to cache instances as they're constructed, and dispense them repeatedly to avoid creating duplicate objects.
+This allows immutable classes to use preconstructed instances, or to cache instances as they're constructed, and dispense them repeatedly to avoid creating duplicate objects.
 
 **Static factory methods, unlike constructors, can return an object of any subtype of their return type.**
 
-> One application of this flexibility is that an API can return objects without making their classes public. Hiding implementation classes in this fashion leads to a very compact API.
+One application of this flexibility is that an API can return objects without making their classes public. Hiding implementation classes in this fashion leads to a very compact API.
 
 **Static factory methods reduce the verbosity of creating parameterized type instances.**
 
-> We must specify the type parameters when we invoke the constructor of a parameterized class even if they're obvious from context.
->
-> ```java
-> Map<String, List<String>> m = new HashMap<String, List<String>>();
-> ```
->
-> With static factories, however, the compiler can figure out the type parameters for you.
->
-> ```java
-> public static <K, V> HashMap<K, V> newInstance() {
->     return new HashMap<K, V>();
-> }
-> ```
->
-> Then we could replace the wordy declaration above with this succinct alternative:
->
-> ```java
-> Map<String, List<String>> m = HashMap.newInstance();
-> ```
+We must specify the type parameters when we invoke the constructor of a parameterized class even if they're obvious from context.
+
+```java
+Map<String, List<String>> m = new HashMap<String, List<String>>();
+```
+
+With static factories, however, the compiler can figure out the type parameters for you.
+
+```java
+public static <K, V> HashMap<K, V> newInstance() {
+    return new HashMap<K, V>();
+}
+```
+
+Then we could replace the wordy declaration above with this succinct alternative:
+
+```java
+Map<String, List<String>> m = HashMap.newInstance();
+```
 
 **Disadvantages**
 
@@ -58,7 +58,7 @@ public static Boolean valueOf(boolean b) {
 
 Static factories and constructors share a limitation: they do not scale well to large numbers of optional parameters.
 
-> Example: Consider a class representing the Nutrition Facts label that appears on packaged foods. These labels have a few required fields - serving size, servings per container, and calories per serving - and over twenty option fields - total fat, saturated fat, trans fat, and so on. Most products have nonzero values for only a few of these optional fields.
+Example: Consider a class representing the Nutrition Facts label that appears on packaged foods. These labels have a few required fields - serving size, servings per container, and calories per serving - and over twenty option fields - total fat, saturated fat, trans fat, and so on. Most products have nonzero values for only a few of these optional fields.
 
 **Builder Pattern**
 
@@ -193,6 +193,28 @@ public enum Elvis {
 This approach is functionally equivalent to the public field approach, except that it is more concise, provides the serialization machinery for free, and provides an ironclad guarantee against multiple instantiation, even in the face of sophisticated serialization or reflection attacks.
 
 ## Enforce noninstantiability with a private constructor
+
+Occasionally you'll want to write a class that is just a grouping of static methods and static fields. They can be used to group related methods on primitive values or arrays, in the manner of `java.lang.Math` or `java.util.Arrays`.
+
+Such utility classes were not designed to be instantiated: an instance would be nonsensical. In the absence of explicit constructors, however, the compiler provides a public, parameterless *default constructor*. To a user, this constructor is indistinguishable from any other. 
+
+**Attempting to enforce noninstantiablility by making a class abstract does not work**. the class can be subclassed and the subclass instantiated. 
+
+There is, however, a simple idiom to ensure noninstantiability. A default constructor is generated only if a class contains no explicit constructors, so **a class can be made noninstantiable by including a private constructor**.
+
+```java
+//Non instantiable utility class
+public class UtilityClass {
+    //Suppress default constructor for noninstantiability
+    private UtilityClass() {
+        throw new AssertionError();
+    }
+}
+```
+
+Because the explicit constructor is private, it is inaccessible outside the class.
+
+As a side effect, this idiom also prevents the class from being subclassed. All constructors must invoke a superclass constructor, explicitly or implicitly, and a subclass would have no accessible superclass constructor to invoke.
 
 ## Avoid creating unnecessary objects
 
