@@ -66,3 +66,45 @@ public final class Singleton {
     }
 }
 ```
+
+## Builder
+
+**Builder** is a creational pattern that lets you construct complex objects step by step. The pattern allows you to produce different types and representations of an object using the same construction code.
+
+```java
+class Student {
+    
+    private final int id;
+    private final String name;
+    
+    public Student(Builder builder) {
+        this.id = builder.id;
+        this.name = builder.name;
+    }
+    
+    public static class Builder {
+        
+        private int id;
+        private String name;
+        
+        public Builder id(int id) {
+            this.id = id;
+            return this;
+        }
+        
+        public Builder name(String name) {
+            this.name = name;
+            return this;
+        }
+        
+        public Student build() {
+            return new Student(this);
+        }
+    }
+}
+```
+
+## Observer 
+
+**Observer** is a behavioral design pattern that lets you define a subscription mechanism to notify multiple objects about any events that happen to the object they're observing.
+
