@@ -34,3 +34,6 @@ serializing into `JSON` will convert it into a string:
 ```
 
 which can be stored or sent through wire to anywhere. The receiver can then deserialize this string back to get the original object.
+
+**Q. How HashMap works internally?**
+
