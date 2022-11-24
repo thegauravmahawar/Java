@@ -1,3 +1,5 @@
+# Inheritance
+
 ## Basics
 
 **Definition**
