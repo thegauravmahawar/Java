@@ -104,6 +104,36 @@ class Student {
 }
 ```
 
+## Factory
+
+**Factory Method** is a creational design pattern that provides an interface for creating objects in a superclass, but allows subclasses to alter the type of objects that will be created.
+
+- Use the Factory Method when you don't know beforehand the exact types and dependencies of the objects your code should work with.
+- Use the Factory Method when you want to provide users of your library or framework with a way to extend its internal components.
+
+```java
+interface Button {
+    void render();
+    void onClick();
+}
+
+class HtmlButton implements Button {
+    
+    public void render() {
+        System.out.println("<button>Test button</button>");
+        onClick();
+    }
+    
+    public void onClick() {
+        System.out.println("Click button says - 'Hello World!'");
+    }
+}
+```
+
+## Decorator
+
+**Decorator** is a structural design pattern that lets you attach new behaviors to objects by placing these objects inside special wrapper objects that contain the behaviors.
+
 ## Observer 
 
 **Observer** is a behavioral design pattern that lets you define a subscription mechanism to notify multiple objects about any events that happen to the object they're observing.
