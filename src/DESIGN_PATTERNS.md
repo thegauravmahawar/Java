@@ -1,5 +1,44 @@
 # Design Patterns
 
+## Solid Principles
+
+**Single Responsibility Principle**
+
+A class should have one, and only one, reason to change.
+
+When requirements change, this implies that the code has to undergo some reconstruction, meaning that the classes have to be modified. The more responsibilities a class has, the more change requests it will get, and the harder those changes will be to implement.
+
+**Open Closed Principle**
+
+You should be able to extend a class's behavior, without modifying it.
+
+- **Open for extension**. This ensures that the class behavior can be extended.
+- **Closed for modification**. The source code of a such a class is set in stone, no one is allowed to make changes to the code.
+
+This is achieved through *abstractions*. Whenever we have to inject a dependency, we would inject the interface/higher-level class instead of an instance of a lower-level class. 
+
+```java
+interface Shape {}
+
+class Rectangle implements Shape {}
+
+class Square implements Shape {}
+```
+
+**Liskov Substitution Rule**
+
+Derived classes must be substitutable for their base classes.
+
+**Interface Segregation Principle**
+
+Make fine-grained interfaces that are client specific.
+
+Instead of having an `Animal` interface with `eat`, `sleep`, and `walk` methods. We can have specific interfaces like `CanWalk`, `CanEat`, `CanSleep` as all `Animal` objects may not have all these properties.
+
+**Dependency Inversion Principle**
+
+Depend on abstractions, not on concretions.
+
 ## Singleton
 
 **Singleton** is a creational design pattern that lets you ensure that a class has only one instance, while providing a global access point to this instance.
