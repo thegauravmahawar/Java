@@ -13,7 +13,7 @@ When requirements change, this implies that the code has to undergo some reconst
 You should be able to extend a class's behavior, without modifying it.
 
 - **Open for extension**. This ensures that the class behavior can be extended.
-- **Closed for modification**. The source code of a such a class is set in stone, no one is allowed to make changes to the code.
+- **Closed for modification**. The source code of such a class is set in stone, no one is allowed to make changes to the code.
 
 This is achieved through *abstractions*. Whenever we have to inject a dependency, we would inject the interface/higher-level class instead of an instance of a lower-level class. 
 

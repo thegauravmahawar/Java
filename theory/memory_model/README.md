@@ -2,7 +2,7 @@
 
 The Java memory model used internally in the JVM divides memory between thread stacks and heap.
 
-![Java Memory Model](../assets/java-memory-model-1.png)
+![Java Memory Model](../../assets/java-memory-model-1.png)
 
 ## Thread Stack
 
@@ -17,11 +17,11 @@ When a Java program starts, the `OS` allots memory to the `JVM` for the applicat
 
 The heap contains all objects created in the application regardless of which thread created the object.
 
-![Java Memory Model 2](../assets/java-memory-model-2.png)
+![Java Memory Model 2](../../assets/java-memory-model-2.png)
 
 A local variable may be of primitive type, in which case it is kept on the thread stack. A local variable may also be a reference to an object. In that case the reference (the local variable) is stored on the thread stack, but the object itself is stored on the heap.
 
-![Java Memory Model 3](../assets/java-memory-model-3.png)
+![Java Memory Model 3](../../assets/java-memory-model-3.png)
 
 The **Young Generation** memory space is where the new objects are created. Young generation is divided into two parts - **Eden Memory** and **Survivor Memory**.
 
@@ -29,7 +29,7 @@ When Eden space is filled, a **Minor GC** is performed and all the survivor obje
 
 **Old Generation** memory contains objects that are long-lived and have survived many iterations of a Minor GC.
 
-![Java Heap](../assets/java-heap-1.png)
+![Java Heap](../../assets/java-heap-1.png)
 
 ## Permanent Generation
 
@@ -120,14 +120,14 @@ To determine which objects are no longer in use, the JVM intermittently runs wha
 
 During **mark phase**, the GC identifies the objects that are still in use and set their `mark bit` to true. The search starts with a root set of references kept in local variables in the stack or global variables. Starting from the root references the GC will conduct a depth search for the objects that have reachable references from the root. Any object that keeps a reference of another object, keeps that object alive.
 
-![Mark Phase](../assets/java-mark-phase.png)
+![Mark Phase](../../assets/java-mark-phase.png)
 
 During **sweep phase**, all the unmarked objects from the **mark phase** will be removed from the memory freeing up space.
 
-![Sweep Phase](../assets/java-sweep-phase.png)
+![Sweep Phase](../../assets/java-sweep-phase.png)
 
 After the sweep phase, all the memory locations are rearranged to provide a more compact memory allocation. The downside of this approach is an increased GC pause duration as it needs to copy all objects to a new place and to update all references to such objects.
 
-![Mark Sweep Compact GC](../assets/java-compact-phase.png)
+![Mark Sweep Compact GC](../../assets/java-compact-phase.png)
 
 Garbage collection is intended to remove the cause for classic memory leaks: unreachable-but-not-deleted objects in memory. However, this works only for memory leaks in the original sense. It's possible to have unused objects that are still reachable by an application because the developer simply forgot to dereference them. Such objects cannot be garbage-collected. Even worse, such a logical memory leak cannot be detected by any software. Even the best analysis software can only highlight suspicious objects.
