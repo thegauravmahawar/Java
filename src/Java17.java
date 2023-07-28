@@ -35,14 +35,14 @@ public class Java17 {
     private static void textBlock() throws Exception {
         var writer = new BufferedWriter(new FileWriter("demo.txt"));
         writer.write("""
-               <html>
-                 <body>
-                   <p>
-                     <div>Hello World!</div>
-                   </p>
-                 </body>
-               </html>
-               """);
+                <html>
+                  <body>
+                    <p>
+                      <div>Hello World!</div>
+                    </p>
+                  </body>
+                </html>
+                """);
         writer.close();
     }
 
@@ -50,7 +50,8 @@ public class Java17 {
     //the constructor has completed their values cannot be changed anymore.
     //The Java compiler will automatically generate the constructor, getter
     //for the instance variables, hashcode, equals, and toString methods.
-    public record PersonRecord(String name, int age) {}
+    public record PersonRecord(String name, int age) {
+    }
 
     public static void main(String... args) throws Exception {
         switch1(0);
